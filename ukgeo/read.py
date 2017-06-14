@@ -34,3 +34,25 @@ def production_blocks(minx, miny, maxx, maxy):
     for x in range(start_x, end_x + 1):
         for y in range(start_y, end_y + 1):
             yield 'HB{:0>2}{:0>2}'.format(x, y)
+
+
+def production_block_chunked_files(root_folder, minx, miny, maxx, maxy):
+    """Generator of shape file paths that are chunked by production blocks.
+
+    Based on a rectangular bounding box defined in OS national grid,
+    this generator will yield all shape files that contain GeoInformationGroup
+    production blocks that are touched by the bounding box.
+
+    Supports only bounding boxes entirely in the HB production block
+    reference.
+
+    Parameters:
+        * root_folder:            the root folder containing all shape files
+        * minx, miny, maxx, maxy: the parameters of the bounding box
+                                  defined in OS national grid
+
+    Yields:
+        * file path of each file containing the production block
+    """
+    for production_block in production_blocks(minx, miny, maxx, maxy):
+        yield list(root_folder.glob('*{}*.shp'.format(production_block)))[0]
