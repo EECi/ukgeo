@@ -1,3 +1,5 @@
+import geopandas as gpd
+
 HB_MIN_X = 500000
 HB_MAX_X = 600000
 HB_MIN_Y = 100000
@@ -36,23 +38,36 @@ def production_blocks(minx, miny, maxx, maxy):
             yield 'HB{:0>2}{:0>2}'.format(x, y)
 
 
-def production_block_chunked_files(root_folder, minx, miny, maxx, maxy):
-    """Generator of shape file paths that are chunked by production blocks.
-
-    Based on a rectangular bounding box defined in OS national grid,
-    this generator will yield all shape files that contain GeoInformationGroup
-    production blocks that are touched by the bounding box.
-
-    Supports only bounding boxes entirely in the HB production block
-    reference.
+def production_block_chunked_files(root_folder, production_blocks):
+    """Generator of shape file paths of GeoInformationGroup files chunked by production blocks.
 
     Parameters:
-        * root_folder:            the root folder containing all shape files
-        * minx, miny, maxx, maxy: the parameters of the bounding box
-                                  defined in OS national grid
+        * root_folder:       the root folder containing all shape files
+        * production_blocks: an iterable of production block names
 
     Yields:
         * file path of each file containing the production block
     """
-    for production_block in production_blocks(minx, miny, maxx, maxy):
+    for production_block in production_blocks:
         yield list(root_folder.glob('*{}*.shp'.format(production_block)))[0]
+
+
+def read_ukmap(root_folder, production_blocks):
+    """Reads UKMAP data for the provided production blocks.
+
+    Parameters:
+        * root_folder:       the root folder containing all shape files
+        * production_blocks: an iterable of production block names
+
+    Returns:
+        * a GeoPandas GeoDataFrame containing all data
+    """
+    raw_data = None
+    for shape_file_path in production_block_chunked_files(root_folder, production_blocks):
+        print('Reading {}'.format(shape_file_path))
+        shape_file_data = gpd.read_file(shape_file_path.as_posix())
+        if raw_data is None:
+            raw_data = shape_file_data
+        else:
+            raw_data = raw_data.append(shape_file_data)
+    return raw_data
