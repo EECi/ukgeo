@@ -11,6 +11,7 @@ PATH_TO_RESOURCES = TEST_DIR / 'resources'
 PATH_TO_PRODUCTION_BLOCK_FILES = PATH_TO_RESOURCES / 'productionblockfiles'
 PATH_TO_PRODUCTION_BLOCK_HB0101 = PATH_TO_PRODUCTION_BLOCK_FILES / 'HB0101-something.shp'
 PATH_TO_PRODUCTION_BLOCK_HB0102 = PATH_TO_PRODUCTION_BLOCK_FILES / 'somethingHB0102more.shp'
+PATH_TO_UKBUILDINGS = PATH_TO_RESOURCES / 'ukbuildings.shp'
 
 
 @pytest.mark.parametrize("minx,miny,maxx,maxy,expected_result", [
@@ -49,3 +50,13 @@ def test_production_block_file_generator():
 def test_read_ukmap_files():
     data = ukgeo.read_ukmap(PATH_TO_PRODUCTION_BLOCK_FILES, ['HB0101', 'HB0102'])
     assert len(data.index) == 16 * 2
+
+
+def test_read_ukbuildings():
+    data = ukgeo.read_ukbuildings(PATH_TO_UKBUILDINGS)
+    assert len(data.index) == 9 * 9
+
+
+def test_read_ukbuildings_using_string():
+    data = ukgeo.read_ukbuildings(PATH_TO_UKBUILDINGS.as_posix())
+    assert len(data.index) == 9 * 9

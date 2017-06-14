@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import geopandas as gpd
 
 HB_MIN_X = 500000
@@ -71,3 +73,9 @@ def read_ukmap(root_folder, production_blocks):
         else:
             raw_data = raw_data.append(shape_file_data)
     return raw_data
+
+
+def read_ukbuildings(path_to_file):
+    """Reads UKBuildings data from the provided file."""
+    path_to_file = Path(path_to_file)
+    return gpd.read_file(path_to_file.as_posix())

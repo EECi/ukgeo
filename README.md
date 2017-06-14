@@ -24,6 +24,18 @@ ukmap = ukgeo.read_ukmap(
 )
 ```
 
+### UKBuildings
+
+Recent versions of UKBuildings are not chunked into production blocks but
+distributed as single files. Chunked reads of older UKBuildings verions
+are currently not supported.
+
+```Python
+import ukgeo
+
+ukbuildings = ukgeo.read_ukbuildings(path_to_file)
+```
+
 ## Developer Guide
 
 ### Installation
