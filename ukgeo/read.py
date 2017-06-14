@@ -2,6 +2,8 @@ from pathlib import Path
 
 import geopandas as gpd
 
+from .datatypes import convert_to_proper_ukbuilding_types
+
 HB_MIN_X = 500000
 HB_MAX_X = 600000
 HB_MIN_Y = 100000
@@ -75,7 +77,18 @@ def read_ukmap(root_folder, production_blocks):
     return raw_data
 
 
-def read_ukbuildings(path_to_file):
-    """Reads UKBuildings data from the provided file."""
+def read_ukbuildings(path_to_file, convert_types=True):
+    """Reads UKBuildings data from the provided file.
+
+    Parameters:
+        * path_to_file:  the path to the shape file containing all data
+        * convert_types: (optional, default True) if True converts datatypes to more
+                         appropriate ones to save memory space and ease the handling
+                         with the data; for example converts flags from int64 to bool8,
+                         and converts strings to categoricals.
+    """
     path_to_file = Path(path_to_file)
-    return gpd.read_file(path_to_file.as_posix())
+    data = gpd.read_file(path_to_file.as_posix())
+    if convert_types:
+        data = convert_to_proper_ukbuilding_types(data)
+    return data
