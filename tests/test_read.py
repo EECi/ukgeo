@@ -54,9 +54,16 @@ def test_read_ukmap_files():
 
 def test_read_ukbuildings():
     data = ukgeo.read_ukbuildings(PATH_TO_UKBUILDINGS)
-    assert len(data.index) == 9 * 9
+    assert len(data.index) == 45 * 45
 
 
 def test_read_ukbuildings_using_string():
     data = ukgeo.read_ukbuildings(PATH_TO_UKBUILDINGS.as_posix())
-    assert len(data.index) == 9 * 9
+    assert len(data.index) == 45 * 45
+
+
+def test_cut_out_haringey_from_ukbuildings(cache):
+    data = ukgeo.read_ukbuildings(PATH_TO_UKBUILDINGS.as_posix())
+    haringey = ukgeo.reduce_to_borough(borough_name='Haringey', data=data)
+    assert len(haringey.index) < 45 * 45
+    assert len(haringey.index) > 0
