@@ -22,6 +22,20 @@ ukmap = ukgeo.read_ukmap(
     root_folder=path_to_root_folder,
     production_blocks=ukgeo.production_blocks(minx=500000, maxx=504999, miny=100000, maxy=106000)
 )
+
+# I need the data of all production blocks touched by a certain borough of London
+ukmap = ukgeo.read_ukmap(
+    root_folder=path_to_root_folder,
+    production_blocks=ukgeo.borough_production_blocks('Haringey')
+)
+
+# I need all data of a certain borough of London
+ukmap = ukgeo.read_ukmap(
+    root_folder=path_to_root_folder,
+    production_blocks=ukgeo.borough_production_blocks('Haringey')
+)
+ukmap_haringey = ukgeo.reduce_to_borough('Haringey')
+
 ```
 
 ### UKBuildings

@@ -3,7 +3,7 @@ from pathlib import Path
 
 import pytest
 
-from ukgeo.read import production_block_chunked_files
+from ukgeo.read import production_block_chunked_files, borough_production_blocks
 import ukgeo
 
 TEST_DIR = Path(os.path.abspath(__file__)).parent
@@ -62,8 +62,7 @@ def test_read_ukbuildings_using_string():
     assert len(data.index) == 45 * 45
 
 
-def test_cut_out_haringey_from_ukbuildings(cache):
-    data = ukgeo.read_ukbuildings(PATH_TO_UKBUILDINGS.as_posix())
-    haringey = ukgeo.reduce_to_borough(borough_name='Haringey', data=data)
-    assert len(haringey.index) < 45 * 45
-    assert len(haringey.index) > 0
+def test_borough_production_blocks():
+    haringey_production_blocks = borough_production_blocks('Haringey')
+    assert set(haringey_production_blocks) == set(['HB0818', 'HB0619', 'HB0819', 'HB0718',
+                                                   'HB0618', 'HB0719'])
