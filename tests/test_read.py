@@ -62,7 +62,7 @@ def test_read_ukbuildings_using_string():
     assert len(data.index) == 45 * 45
 
 
-def test_borough_production_blocks():
+def test_borough_production_blocks(cache):
     haringey_production_blocks = borough_production_blocks('Haringey')
     assert set(haringey_production_blocks) == set(['HB0818', 'HB0619', 'HB0819', 'HB0718',
                                                    'HB0618', 'HB0719'])
