@@ -6,6 +6,15 @@ Utilities to work with the UKMap and UKBuilding datasets.
 
 Convenience functions to read UKMap and UKBuildings data.
 
+### Installation
+
+Assuming you have `pip` and `Git` installed you can install the development version directly
+from GitHub.
+
+```bash
+pip install git+git://github.com/EECi/ukgeo@develop
+```
+
 ### UKMap
 
 ```Python
